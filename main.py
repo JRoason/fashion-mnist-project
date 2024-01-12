@@ -32,7 +32,9 @@ def process_image(file):
     return image
 
 
-@app.post("/predict", description="Endpoint for predicting the clothing type of a fashion item from an image.")
+@app.post("/predict", description="Endpoint for predicting the clothing type of a fashion item from an image. "
+                                  "Image should be an image of a single clothing item. "
+                                  "Returns a JSON object with the predicted class.")
 async def predict_image(file: UploadFile = None):
     if file is None:
         return {"error": "No file uploaded."}
