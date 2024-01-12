@@ -68,5 +68,5 @@ async def predict_image(file: UploadFile = None):
     except UnidentifiedImageError:
         raise HTTPException(status_code=422, detail="Invalid file type. Please upload an image.")
     model = load_model()
-    prediction = predict_class(model, image)
-    return {"prediction": prediction}
+    prediction = PredictedClass(prediction=predict_class(model, image))
+    return prediction
