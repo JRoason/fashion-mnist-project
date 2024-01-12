@@ -10,6 +10,9 @@ scikit-learn = "*"
 fastapi = "*"
 pillow = "*"
 pydantic = "*"
+starlette = "*"
+python-multipart = "*"
+uvicorn = "*"
 
 [dev-packages]
 

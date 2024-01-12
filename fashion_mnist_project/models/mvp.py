@@ -36,6 +36,13 @@ def train_model():
 
 
 def load_model():
-    with open('../../models/baseline.pkl', 'rb') as f:
+    with open('models/baseline.pkl', 'rb') as f:
         model = pickle.load(f)
     return model
+
+
+def predict_class(model, image):
+    prediction = model.predict(image)
+    predictionToClass = ["T-shirt/top", "Trouser", "Pullover", "Dress", "Coat",
+                         "Sandal", "Shirt", "Sneaker", "Bag", "Ankle boot"]
+    return predictionToClass[prediction[0]]
