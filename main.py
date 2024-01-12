@@ -12,16 +12,20 @@ class PredictedClass(BaseModel):
 
 app = FastAPI(
     title="Fashion MNIST API",
-    summary="An API endpoint for predicting the clothing type of a fashion item from an image. Trained on the Fashion "
-            "MNIST dataset.",
-    description="""
-    # An API endpoint to access a classifier trained on the Fashion MNIST dataset.
-    # Model Usage
-    The model is trained on 28x28 grayscale images of single clothing items.
-    The model can not predict multiple items in an image.
-    """,
+    summary="An API endpoint for predicting clothing types from images, trained on the Fashion MNIST dataset.",
+    description="""\
+## Fashion MNIST Classifier API Endpoint
+Access a specialized classifier trained on the Fashion MNIST dataset for identifying single clothing items in images.
+
+### Model Usage
+- **Training Data**: 28x28 grayscale images of individual clothing items.
+- **Image Formats**: Accepts formats supported by the Pillow library.
+- **Note**: The model is designed to predict only one item per image.
+
+Refer to the [Pillow library documentation](https://pillow.readthedocs.io/en/stable/handbook/image-file-formats.html) for details on supported image formats.""",
     version="0.1",
 )
+
 
 
 @app.get("/", description="Root endpoint that redirects to the docs.")
