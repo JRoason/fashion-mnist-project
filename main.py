@@ -1,9 +1,14 @@
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 import numpy as np
 from fashion_mnist_project.models.mvp import load_model, predict_class
-from fastapi import FastAPI, UploadFile
+from fastapi import FastAPI, UploadFile, HTTPException
 from pydantic import BaseModel
 from starlette.responses import RedirectResponse
+
+
+class PredictedClass(BaseModel):
+    prediction: str
+
 
 app = FastAPI(
     title="Fashion MNIST API",
@@ -34,11 +39,34 @@ def process_image(file):
 
 @app.post("/predict", description="Endpoint for predicting the clothing type of a fashion item from an image. "
                                   "Image should be an image of a single clothing item. "
-                                  "Returns a JSON object with the predicted class.")
+                                  "Returns a JSON object with the predicted class.",
+          response_model=PredictedClass,
+          response_description="Predict clothing article class from image.",
+          responses={
+              200: {
+                  "description": "Prediction successful.",
+                  "content": {
+                      "application/json": {
+                          "example": {
+                              "prediction": "T-shirt/top"
+                          }
+                      }
+                  }
+              },
+              400: {
+                  "description": "No file uploaded."
+              },
+              422: {
+                  "description": "Invalid file type. Please upload an image."
+              }
+          })
 async def predict_image(file: UploadFile = None):
     if file is None:
-        return {"error": "No file uploaded."}
-    image = process_image(file)
+        raise HTTPException(status_code=400, detail="No file uploaded.")
+    try:
+        image = process_image(file)
+    except UnidentifiedImageError:
+        raise HTTPException(status_code=422, detail="Invalid file type. Please upload an image.")
     model = load_model()
     prediction = predict_class(model, image)
     return {"prediction": prediction}
