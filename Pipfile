@@ -7,6 +7,9 @@ name = "pypi"
 numpy = "*"
 tensorflow = "*"
 scikit-learn = "*"
+fastapi = "*"
+pillow = "*"
+pydantic = "*"
 
 [dev-packages]
 
