@@ -1,6 +1,6 @@
 from PIL import Image, UnidentifiedImageError
 import numpy as np
-from fashion_mnist_project.models.mvp import load_model, predict_class
+from fashion_mnist_project.models.model import load_model, predict_class
 from fastapi import FastAPI, UploadFile, HTTPException
 from pydantic import BaseModel
 from starlette.responses import RedirectResponse
@@ -36,7 +36,7 @@ async def root():
 def process_image(file):
     image = Image.open(file.file).convert('L').resize((28, 28))
     image = np.array(image)
-    image = image.reshape((1, 784))
+    image = image.reshape(1, 28, 28, 1)
     image = image / np.max(image)
     return image
 
