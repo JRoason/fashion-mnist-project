@@ -11,13 +11,13 @@ import keras_tuner as kt
 
 import pickle
 
-(X_train, y_train), _ = fashion_mnist.load_data()
-
-X_train = X_train / np.max(X_train)
-
-y_train = OneHotEncoder(sparse_output=False).fit_transform(y_train.reshape(-1, 1))
-
-X_train, X_test, y_train, y_test = train_test_split(X_train, y_train, test_size=0.2)
+# (X_train, y_train), _ = fashion_mnist.load_data()
+#
+# X_train = X_train / np.max(X_train)
+#
+# y_train = OneHotEncoder(sparse_output=False).fit_transform(y_train.reshape(-1, 1))
+#
+# X_train, X_test, y_train, y_test = train_test_split(X_train, y_train, test_size=0.2)
 
 class HyperModel(kt.HyperModel):
     def build(self, hp):
@@ -65,26 +65,26 @@ class HyperModel(kt.HyperModel):
         return model
 
 
-conv_tuner = kt.GridSearch(HyperModel(), objective='val_accuracy',
-                           directory='hyperparameter_tuning_output_convlayer_threelayers',
-                           project_name='fashion_mnist', overwrite=False)
-
-# tuner.search(X_train, y_train, epochs=50, validation_data=(X_test, y_test), callbacks=[stop_early])
-
-convlayer_results = conv_tuner.get_best_hyperparameters(num_trials=5)[0:6]
-
-dense_tuner = kt.GridSearch(HyperModel(), objective='val_accuracy',
-                            directory='hyperparameter_tuning_output_dense_layers',
-                            project_name='fashion_mnist', overwrite=False)
-
-dense_results = dense_tuner.get_best_hyperparameters(num_trials=5)[0:6]
-
-print(conv_tuner.results_summary(num_trials=5))
-print(dense_tuner.results_summary(num_trials=5))
-
-for i in range(5):
-    print(f"""
-    The {i}th set of hyperparameters is:
-    {convlayer_results[i].values}
-    """)
-
+# conv_tuner = kt.GridSearch(HyperModel(), objective='val_accuracy',
+#                            directory='hyperparameter_tuning_output_convlayer_threelayers',
+#                            project_name='fashion_mnist', overwrite=False)
+#
+# # tuner.search(X_train, y_train, epochs=50, validation_data=(X_test, y_test), callbacks=[stop_early])
+#
+# convlayer_results = conv_tuner.get_best_hyperparameters(num_trials=5)[0:6]
+#
+# dense_tuner = kt.GridSearch(HyperModel(), objective='val_accuracy',
+#                             directory='hyperparameter_tuning_output_dense_layers',
+#                             project_name='fashion_mnist', overwrite=False)
+#
+# dense_results = dense_tuner.get_best_hyperparameters(num_trials=5)[0:6]
+#
+# print(conv_tuner.results_summary(num_trials=5))
+# print(dense_tuner.results_summary(num_trials=5))
+#
+# for i in range(5):
+#     print(f"""
+#     The {i}th set of hyperparameters is:
+#     {convlayer_results[i].values}
+#     """)
+#
