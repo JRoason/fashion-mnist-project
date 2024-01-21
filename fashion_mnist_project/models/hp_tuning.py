@@ -69,13 +69,15 @@ class HyperModel(kt.HyperModel):
 #                            directory='hyperparameter_tuning_output_convlayer_threelayers',
 #                            project_name='fashion_mnist', overwrite=False)
 #
-# # tuner.search(X_train, y_train, epochs=50, validation_data=(X_test, y_test), callbacks=[stop_early])
+# conv_tuner.search(X_train, y_train, epochs=50, validation_data=(X_test, y_test), callbacks=[stop_early])
 #
 # convlayer_results = conv_tuner.get_best_hyperparameters(num_trials=5)[0:6]
 #
 # dense_tuner = kt.GridSearch(HyperModel(), objective='val_accuracy',
 #                             directory='hyperparameter_tuning_output_dense_layers',
 #                             project_name='fashion_mnist', overwrite=False)
+#
+# dense_tuner.search(X_train, y_train, epochs=50, validation_data=(X_test, y_test), callbacks=[stop_early])
 #
 # dense_results = dense_tuner.get_best_hyperparameters(num_trials=5)[0:6]
 #
