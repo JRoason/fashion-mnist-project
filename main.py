@@ -1,6 +1,6 @@
 from PIL import Image, UnidentifiedImageError
 import numpy as np
-from fashion_mnist_project.models.model import load_model, predict_class
+from fashion_mnist_project.models.model import load_classifier, predict_class
 from fastapi import FastAPI, UploadFile, HTTPException
 from pydantic import BaseModel
 from starlette.responses import RedirectResponse
@@ -71,6 +71,6 @@ async def predict_image(file: UploadFile = None):
         image = process_image(file)
     except UnidentifiedImageError:
         raise HTTPException(status_code=422, detail="Invalid file type. Please upload an image.")
-    model = load_model()
+    model = load_classifier()
     prediction = PredictedClass(prediction=predict_class(model, image))
     return prediction

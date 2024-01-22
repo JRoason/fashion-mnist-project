@@ -1,51 +1,58 @@
 import tensorflow as tf
 import numpy as np
 from sklearn.preprocessing import OneHotEncoder
-from sklearn.model_selection import train_test_split
 from tensorflow.keras.datasets import fashion_mnist
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.metrics import confusion_matrix
 from tensorflow.keras.models import load_model
-from tensorflow.keras.callbacks import EarlyStopping
-from tensorflow.keras import layers, models
-from tensorflow.keras.optimizers import Adam
-from tensorflow.keras.losses import CategoricalCrossentropy
+
 
 def train_model():
-    stop_early = EarlyStopping(monitor='val_loss', patience=5)
 
-    (X_train, y_train), _ = fashion_mnist.load_data()
+    (x_train, y_train), (x_test, y_test) = fashion_mnist.load_data()
 
-    X_train = X_train / np.max(X_train)
+    x_train = x_train / np.max(x_train)
+    x_test = x_test / np.max(x_test)
 
     y_train = OneHotEncoder(sparse_output=False).fit_transform(y_train.reshape(-1, 1))
+    y_test = OneHotEncoder(sparse_output=False).fit_transform(y_test.reshape(-1, 1))
 
-    X_train, X_test, y_train, y_test = train_test_split(X_train, y_train, test_size=0.2)
+    model = load_model('models/final_model_for_real.keras')
 
-    model = models.Sequential()
+    history = model.fit(x_train, y_train, validation_split=0.1, epochs=50, verbose=1,
+                        callbacks=[tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=5)])
 
-    model.add(layers.Conv2D(64, (5, 5), activation='relu', input_shape=(28, 28, 1)))
-    model.add(layers.MaxPooling2D((2, 2)))
-    model.add(layers.Conv2D(128, (3, 3), activation='relu'))
-    model.add(layers.MaxPooling2D((2, 2)))
+    plt.plot(history.history['accuracy'], label='accuracy')
+    plt.plot(history.history['val_accuracy'], label='val_accuracy')
+    plt.xlabel('Epoch')
+    plt.ylabel('Accuracy')
+    plt.legend(loc='lower right')
+    plt.show()
 
-    model.add(layers.Flatten())
+    test_loss, test_acc = model.evaluate(x_test, y_test, verbose=2)
 
-    model.add(layers.Dense(256, activation='relu'))
+    print(test_loss)
+    print(test_acc)
 
-    model.add(layers.Dense(10))
+    predictions = model.predict(x_test)
 
-    model.compile(optimizer=Adam(learning_rate=1e-4),
-                  loss=CategoricalCrossentropy(from_logits=True),
-                  metrics=['accuracy'])
+    plt.figure()
 
-    model.fit(X_train, y_train, epochs=50, validation_split=0.1, callbacks=[stop_early])
+    conf_matrix = confusion_matrix(np.argmax(y_test, axis=1), np.argmax(predictions, axis=1))
+    ax = sns.heatmap(conf_matrix, annot=True, fmt='d')
+    ax.set_xlabel('Predicted Labels')
+    ax.set_ylabel('True Labels')
 
-    model.save('models/final_model_2.keras')
+    plt.show()
 
-def load_model():
-    model = load_model('models/final_model_2.keras')
+    model.save('models/final_model_trained.keras')
+
+
+def load_classifier():
+    model = tf.keras.models.load_model('models/final_model_trained.keras')
     model.summary()
     return model
-
 
 def predict_class(model, image):
     prediction = model.predict(image)
