@@ -4,6 +4,7 @@ from fashion_mnist_project.models.model import load_classifier, predict_class
 from fastapi import FastAPI, UploadFile, HTTPException
 from pydantic import BaseModel
 from starlette.responses import RedirectResponse
+import streamlit as st
 
 
 class PredictedClass(BaseModel):
@@ -74,3 +75,31 @@ async def predict_image(file: UploadFile = None):
     model = load_classifier()
     prediction = PredictedClass(prediction=predict_class(model, image))
     return prediction
+
+
+if __name__ == "__main__":
+
+    st.title("Fashion MNIST Classifier")
+
+    st.write("""\
+    Access a specialized classifier trained on the Fashion MNIST dataset for identifying single clothing items in images.\n
+    ### Model Usage
+    Upload an image using the file uploader below. The model is designed to predict only one item per image.\n
+    """)
+
+    uploaded_file = st.file_uploader("Choose an image...")
+    if uploaded_file is not None:
+        image = Image.open(uploaded_file).convert('L').resize((28, 28))
+        image = np.array(image)
+        image = image.reshape(1, 28, 28, 1)
+        image = image / np.max(image)
+        model = load_classifier()
+        prediction = predict_class(model, image)
+        st.write("""\
+        ### Input Image
+        """)
+        st.image(uploaded_file, caption='Uploaded Image.', use_column_width=True)
+        st.write("""\
+        ### Prediction
+        {}""".format(prediction))
+
