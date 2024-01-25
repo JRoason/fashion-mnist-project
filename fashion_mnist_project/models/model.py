@@ -24,7 +24,7 @@ def train_model():
 
 def load_classifier(cnn=True):
     if cnn:
-        model = tf.keras.models.load_model('models/final_model_trained.keras')
+        model = tf.keras.models.load_model('models/model.keras')
     else:
         with open('models/baseline.pkl', 'rb') as f:
             model = pickle.load(f)

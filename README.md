@@ -29,7 +29,7 @@ The repository hosts the code for our project, as well as the trained models.
 We have integrated our CNN model into a simple Streamlit GUI, which can be run by running:
 
 ```bash
-$ python -m streamlit main.py
+$ python -m streamlit run main.py
 ```
 
 Additionally, we have integrated our model into a FastAPI server, which can be started by running:
