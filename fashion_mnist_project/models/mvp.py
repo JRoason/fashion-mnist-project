@@ -29,20 +29,3 @@ def train_model():
     with open('../../models/baseline.pkl', 'wb') as f:
         pickle.dump(best_model, f)
 
-    # Print the best parameters found
-    print("The best parameters found for logistic regression:")
-    print(clf.best_params_)
-    print("The accuracy score obtained with the best parameters: " + str(clf.best_score_))
-
-
-def load_model():
-    with open('models/baseline.pkl', 'rb') as f:
-        model = pickle.load(f)
-    return model
-
-
-def predict_class(model, image):
-    prediction = model.predict(image)
-    predictionToClass = ["T-shirt/top", "Trouser", "Pullover", "Dress", "Coat",
-                         "Sandal", "Shirt", "Sneaker", "Bag", "Ankle boot"]
-    return predictionToClass[prediction[0]]
