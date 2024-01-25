@@ -2,3 +2,8 @@ Pipfile.lock
 .idea
 __pycache__/
 .DS_Store
+
+hyperparameter_tuning_output_cross_validation_second_run/
+hyperparameter_tuning_output_cross_validation/
+hyperparameter_tuning_output_dense_layers/
+hyperparameter_tuning_output_convolutional_layers/

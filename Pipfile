@@ -5,8 +5,19 @@ name = "pypi"
 
 [packages]
 numpy = "*"
-tensorflow = "*"
 scikit-learn = "*"
+fastapi = "*"
+pillow = "*"
+pydantic = "*"
+starlette = "*"
+python-multipart = "*"
+uvicorn = "*"
+matplotlib = "*"
+cuda-python = "*"
+tensorflow = {extras = ["and-cuda"], version = "==2.14.0"}
+keras-tuner = "*"
+seaborn = "*"
+streamlit = "*"
 
 [dev-packages]
 
